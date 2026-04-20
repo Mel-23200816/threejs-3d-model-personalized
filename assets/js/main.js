@@ -15,7 +15,7 @@ let activeAction, previousAction;
 
 // Lista de movimientos actualizada con el nombre exacto de tu archivo
 const animFiles = [
-    { name: "RunToRolling", file: "Run To Rolling.fbx", key: "1" },
+    { name: "Reaction", file: "Reaction.fbx", key: "1" },
     { name: "BrooklynUprock", file: "Brooklyn Uprock.fbx", key: "2" },
     { name: "Kicking", file: "Kicking.fbx", key: "3" },
     { name: "LivershotKnockdown", file: "Livershot Knockdown.fbx", key: "4" },
