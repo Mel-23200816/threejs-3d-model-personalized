@@ -1,0 +1,33 @@
+/* style.css */
+
+body { 
+    margin: 0; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh; 
+}
+
+#canvas-container { 
+    flex-grow: 1; 
+    position: relative; 
+}
+
+.controls-panel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* El pointer-events en none es crucial para que los clics pasen al canvas 3D 
+       y no se queden bloqueados por el panel transparente */
+    pointer-events: none; 
+}
+
+footer { 
+    background-color: #212529; 
+    color: #adb5bd; 
+    padding: 15px 0; 
+}
