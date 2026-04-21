@@ -1,6 +1,4 @@
 import * as THREE from "three";
-
-// Rutas actualizadas a tu carpeta local 'jsm'
 import Stats from "../jsm/libs/stats.module.js";
 import { OrbitControls } from "../jsm/controls/OrbitControls.js";
 import { FBXLoader } from "../jsm/loaders/FBXLoader.js";
@@ -13,13 +11,14 @@ const clock = new THREE.Clock();
 const actions = {};
 let activeAction, previousAction;
 
-// Lista de movimientos actualizada con el nombre exacto de tu archivo
+// --- LISTA DE ANIMACIONES ACTUALIZADA ---
 const animFiles = [
     { name: "Reaction", file: "Reaction.fbx", key: "1" },
     { name: "BrooklynUprock", file: "Brooklyn Uprock.fbx", key: "2" },
     { name: "Kicking", file: "Kicking.fbx", key: "3" },
     { name: "LivershotKnockdown", file: "Livershot Knockdown.fbx", key: "4" },
-    { name: "WalkBackward", file: "Walking Backwards.fbx", key: "5" } // <-- Nombre corregido aquí
+    { name: "WalkBackward", file: "Walking Backwards.fbx", key: "5" },
+    { name: "SambaDancing", file: "Samba Dancing.fbx", key: "6" }
 ];
 
 init();
@@ -31,42 +30,48 @@ function init() {
     camera.position.set(100, 200, 300);
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xa0a0a0);
-    scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
+    scene.fog = new THREE.FogExp2(0x0f172a, 0.002);
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 5);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
     hemiLight.position.set(0, 200, 0);
     scene.add(hemiLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 5);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
     dirLight.position.set(0, 200, 100);
     dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 180;
-    dirLight.shadow.camera.bottom = -100;
-    dirLight.shadow.camera.left = -120;
-    dirLight.shadow.camera.right = 120;
     scene.add(dirLight);
 
-    const mesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(2000, 2000),
-        new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
-    );
-    mesh.rotation.x = -Math.PI / 2;
-    mesh.receiveShadow = true;
-    scene.add(mesh);
+    const cyanLight = new THREE.PointLight(0x06b6d4, 80000, 500);
+    cyanLight.position.set(100, 100, 100);
+    scene.add(cyanLight);
 
-    const grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000);
-    grid.material.opacity = 0.2;
-    grid.material.transparent = true;
-    scene.add(grid);
+    const magentaLight = new THREE.PointLight(0xec4899, 80000, 500);
+    magentaLight.position.set(-100, 50, -100);
+    scene.add(magentaLight);
+
+    const gridHelper = new THREE.GridHelper(1000, 40, 0x06b6d4, 0xffffff);
+    gridHelper.material.opacity = 0.15;
+    gridHelper.material.transparent = true;
+    scene.add(gridHelper);
+
+    const planeMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(2000, 2000),
+        new THREE.MeshPhongMaterial({ 
+            color: 0x050505, 
+            depthWrite: false, 
+            transparent: true, 
+            opacity: 0.8 
+        })
+    );
+    planeMesh.rotation.x = -Math.PI / 2;
+    planeMesh.receiveShadow = true;
+    scene.add(planeMesh);
 
     loader = new FBXLoader(manager);
     
-    // Cargar el Modelo Base
     loader.load("./assets/models/fbx/character.fbx", function (group) {
         object = group;
         mixer = new THREE.AnimationMixer(object);
-
         object.traverse(function (child) {
             if (child.isMesh) {
                 child.castShadow = true;
@@ -74,12 +79,10 @@ function init() {
             }
         });
         scene.add(object);
-
-        // Cargar las Animaciones
         loadAnimations();
     });
 
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setAnimationLoop(animate);
@@ -92,52 +95,64 @@ function init() {
 
     window.addEventListener("resize", onWindowResize);
     window.addEventListener("keydown", onKeyDown);
+    setupUIButtons(); 
 
     stats = new Stats();
+    stats.dom.style.position = 'absolute';
     container.appendChild(stats.dom);
 }
 
 function loadAnimations() {
     let animsLoaded = 0;
-
     animFiles.forEach((anim) => {
         loader.load("./assets/models/fbx/" + anim.file, function (animObject) {
             const clip = animObject.animations[0];
             const action = mixer.clipAction(clip);
-            
             actions[anim.name] = action;
             animsLoaded++;
 
             if (animsLoaded === animFiles.length) {
-                fadeToAction("BrooklynUprock", 0.5);
+                // Iniciar con la primera animación (Reaction)
+                triggerAnimation(animFiles[0].name, animFiles[0].key); 
             }
         });
     });
 }
 
-function fadeToAction(name, duration) {
-    previousAction = activeAction;
-    activeAction = actions[name];
+function triggerAnimation(name, key) {
+    if (actions[name] && activeAction !== actions[name]) {
+        previousAction = activeAction;
+        activeAction = actions[name];
 
-    if (previousAction && previousAction !== activeAction) {
-        previousAction.fadeOut(duration);
+        if (previousAction) {
+            previousAction.fadeOut(0.5);
+        }
+
+        activeAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(0.5).play();
+        
+        document.querySelectorAll('.anim-btn').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.querySelector(`.anim-btn[data-key="${key}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
     }
-
-    activeAction
-        .reset()
-        .setEffectiveTimeScale(1)
-        .setEffectiveWeight(1)
-        .fadeIn(duration)
-        .play();
 }
 
 function onKeyDown(event) {
     const key = event.key;
     const anim = animFiles.find(a => a.key === key);
-    
-    if (anim && activeAction !== actions[anim.name]) {
-        fadeToAction(anim.name, 0.5);
+    if (anim) {
+        triggerAnimation(anim.name, anim.key);
     }
+}
+
+function setupUIButtons() {
+    const buttons = document.querySelectorAll('.anim-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const key = e.target.getAttribute('data-key');
+            const anim = animFiles.find(a => a.key === key);
+            if (anim) triggerAnimation(anim.name, anim.key);
+        });
+    });
 }
 
 function onWindowResize() {

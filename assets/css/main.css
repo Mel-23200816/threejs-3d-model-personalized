@@ -1,4 +1,5 @@
-/* style.css */
+/* Importar una fuente moderna */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body { 
     margin: 0; 
@@ -6,6 +7,10 @@ body {
     display: flex; 
     flex-direction: column; 
     height: 100vh; 
+    font-family: 'Poppins', sans-serif;
+    /* Fondo vibrante oscuro */
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #170f2e 100%);
+    color: #f8fafc;
 }
 
 #canvas-container { 
@@ -13,21 +18,95 @@ body {
     position: relative; 
 }
 
+/* --- EFECTOS GLASSMORPHISM --- */
+.glass-nav, .glass-footer {
+    background: rgba(15, 23, 42, 0.4) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+
+.glass-footer {
+    border-bottom: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 0;
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* --- PANEL LATERAL --- */
 .controls-panel {
     position: absolute;
     top: 20px;
     left: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    /* El pointer-events en none es crucial para que los clics pasen al canvas 3D 
-       y no se queden bloqueados por el panel transparente */
-    pointer-events: none; 
+    padding: 20px;
+    pointer-events: none; /* No bloquea clics al modelo 3D */
 }
 
-footer { 
-    background-color: #212529; 
-    color: #adb5bd; 
-    padding: 15px 0; 
+.animation-list li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+/* Teclas Neón */
+kbd {
+    background: linear-gradient(45deg, #ec4899, #8b5cf6);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
+}
+
+/* --- VITRINA DE BOTONES (Parte inferior) --- */
+.gallery-container {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    z-index: 10;
+    pointer-events: auto; /* Permite clics */
+    padding: 0 20px;
+}
+
+.anim-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.anim-btn:hover, .anim-btn.active {
+    background: linear-gradient(45deg, #06b6d4, #3b82f6);
+    border-color: transparent;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+    transform: translateY(-3px);
+}
+
+/* Texto especial brillante */
+.text-gradient {
+    background: linear-gradient(45deg, #22d3ee, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

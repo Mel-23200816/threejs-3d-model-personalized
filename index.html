@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visor de Animaciones 3D</title>
+    <title>Visor de Animaciones 3D | Mixamo</title>
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="./assets/css/main.css">
 
     <script type="importmap">
 		{
 			"imports": {
-				"three": "./assets/build/three.module.js",					
+				"three": "./assets/build/three.module.js",
 				"three/addons/": "./assets/jsm/"
 			}
 		}
@@ -20,30 +19,44 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-dark shadow-sm">
+    <nav class="navbar navbar-dark glass-nav shadow-sm">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Visor de Animaciones Mixamo</span>
+            <span class="navbar-brand mb-0 h1 fw-bold">
+                <span class="text-gradient">Visor 3D</span> Interactivo
+            </span>
         </div>
     </nav>
 
     <div id="canvas-container">
-        <div class="controls-panel">
-            <h5>Controles (Teclado)</h5>
-            <ul class="list-unstyled mb-0">
+        
+        <div class="controls-panel glass-panel">
+            <h5 class="fw-bold mb-3">Teclas Rápida</h5>
+            <ul class="list-unstyled mb-0 animation-list">
                 <li><kbd>1</kbd> Reaction</li>
                 <li><kbd>2</kbd> Brooklyn Uprock</li>
                 <li><kbd>3</kbd> Kicking</li>
                 <li><kbd>4</kbd> Livershot Knockdown</li>
                 <li><kbd>5</kbd> Walking Backwards</li>
+                <li><kbd>6</kbd> Samba Dancing</li>
             </ul>
         </div>
+
+        <div class="gallery-container">
+            <button class="anim-btn" data-key="1">Reaction</button>
+            <button class="anim-btn" data-key="2">Brooklyn Uprock</button>
+            <button class="anim-btn" data-key="3">Kicking</button>
+            <button class="anim-btn" data-key="4">Livershot Knockdown</button>
+            <button class="anim-btn" data-key="5">Walking Backwards</button>
+            <button class="anim-btn" data-key="6">Samba Dancing</button>
+        </div>
+
     </div>
 
-    <footer class="text-center">
+    <footer class="text-center glass-footer">
         <div class="container">
             <p class="mb-0">
-                Desarrollado por <strong>Miguel Angel Cano Alejandro</strong><br>
-                Estudiante de Ingeniería en Sistemas Computacionales (6to Semestre) | Instituto Tecnológico de Pachuca
+                Desarrollado por <strong class="text-gradient">Miguel Angel Cano Alejandro</strong><br>
+                <small>Estudiante de Ingeniería en Sistemas Computacionales (6to Semestre) | Instituto Tecnológico de Pachuca</small>
             </p>
         </div>
     </footer>
